@@ -4,11 +4,20 @@ import { useState } from "react";
 import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 
 export function AuthNotice() {
-  const { user, loading, supabase } = useSupabaseUser();
+  const { user, loading, supabase, configError } = useSupabaseUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  if (configError) {
+    return (
+      <section className="mb-3 rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-xs text-red-200">
+        <p className="font-medium">Supabase not configured</p>
+        <p className="mt-1 whitespace-pre-wrap text-red-200/90">{configError}</p>
+      </section>
+    );
+  }
 
   if (loading || user || !supabase) return null;
 
