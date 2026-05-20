@@ -1,11 +1,14 @@
-# Personal OS
+# Personal Hub
 
-A personal operating system dashboard: tasks, habits, CRM, nutrition, journal, finance (hidden by default), Google Calendar, and Telegram voice capture.
+Personal operating system dashboard — tasks, habits, CRM, nutrition, journal, finance (hidden by default), Google Calendar sync, and Telegram voice capture into Supabase.
+
+**Repo:** [github.com/porterraz/personalhub](https://github.com/porterraz/personalhub)
 
 ## Quick start
 
 ```bash
-cd personal-os
+git clone https://github.com/porterraz/personalhub.git
+cd personalhub
 cp .env.example .env.local
 npm install
 npm run dev
@@ -13,25 +16,59 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Docs
+## Documentation
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — system design and data model
-- [BUILD_GUIDE.md](./BUILD_GUIDE.md) — phased implementation checklist
+| Doc | Purpose |
+|-----|---------|
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | System design, data model, voice pipeline |
+| [BUILD_GUIDE.md](./BUILD_GUIDE.md) | Phased implementation checklist (Phases 0–6) |
 
 ## Stack
 
 - **Frontend:** Next.js 16, React, Tailwind CSS
 - **Backend:** Supabase (Postgres + Auth + RLS)
-- **Integrations:** Google Calendar, Google Sheets, Telegram
-- **AI:** OpenAI Whisper (transcription), Claude (classification)
-- **Deploy:** Vercel (serverless API routes)
+- **Integrations:** Google Calendar API, Google Sheets API, Telegram Bot API
+- **AI:** OpenAI Whisper (transcription), Anthropic Claude (classification)
+- **Deploy:** Vercel (serverless API routes, 60s webhook timeout)
+
+## Dashboard modules
+
+| Module | Description |
+|--------|-------------|
+| Finance Pulse | Net worth / cash / debt from Google Sheets — **hidden by default** |
+| Calendar | Upcoming events from Google Calendar |
+| Key Tasks | Priority tasks |
+| Daily Habits | Habits with subtask checkboxes |
+| CRM | Contacts + interaction log |
+| Nutrition | Daily meal / calorie log |
+| Journal | Entries + quick compose |
+
+## Voice automation (Telegram)
+
+1. User sends voice note to Telegram bot
+2. Webhook `POST /api/telegram/webhook` downloads audio
+3. OpenAI Whisper → transcript
+4. Claude → JSON classification (`task`, `crm`, `journal`, `nutrition`, `habit_note`)
+5. Insert into Supabase + audit row in `voice_ingestions`
+6. Bot replies with confirmation
+
+## Environment variables
+
+See [.env.example](./.env.example). Never commit `.env.local`.
 
 ## Project status
 
 | Area | Status |
 |------|--------|
-| Dashboard UI | ✅ Scaffolded with mock data |
-| Supabase schema | ✅ Migration file ready |
-| Telegram webhook | ✅ Route implemented |
-| Google Calendar/Sheets | ✅ Lib + API stubs |
-| Auth & live data | 🔲 Phase 2 in BUILD_GUIDE |
+| Dashboard UI (mock data) | Done |
+| Supabase schema migration | Done (not applied to cloud yet) |
+| Telegram webhook route | Done (needs deploy + env) |
+| Google Calendar / Sheets libs | Done (needs OAuth tokens) |
+| Supabase Auth + live dashboard | Not started (Phase 2) |
+| Google OAuth callback flow | Stub only |
+| Vercel deployment | Not started |
+| Settings / habit persistence | Not started |
+
+## License
+
+Private — personal use.
