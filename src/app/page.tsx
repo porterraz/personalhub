@@ -5,16 +5,6 @@ import { DailyHabits } from "@/components/dashboard/DailyHabits";
 import { CRM } from "@/components/dashboard/CRM";
 import { NutritionLog } from "@/components/dashboard/NutritionLog";
 import { Journal } from "@/components/dashboard/Journal";
-import {
-  mockCalendar,
-  mockContacts,
-  mockFinance,
-  mockHabits,
-  mockInteractions,
-  mockJournal,
-  mockNutrition,
-  mockTasks,
-} from "@/lib/data/mock";
 
 export default function DashboardPage() {
   return (
@@ -38,13 +28,13 @@ export default function DashboardPage() {
       </header>
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 p-6 md:grid-cols-2 lg:grid-cols-3">
-        <FinancePulse snapshots={mockFinance} />
-        <CalendarWidget events={mockCalendar} />
-        <KeyTasks tasks={mockTasks} />
-        <DailyHabits habits={mockHabits} />
-        <CRM contacts={mockContacts} interactions={mockInteractions} />
-        <NutritionLog entries={mockNutrition} />
-        <Journal entries={mockJournal} />
+        <FinancePulse />
+        <CalendarWidget />
+        <KeyTasks />
+        <DailyHabits />
+        <CRM />
+        <NutritionLog />
+        <Journal />
       </div>
     </main>
   );

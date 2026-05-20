@@ -1,14 +1,11 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { Eye, EyeOff, TrendingUp } from "lucide-react";
-import { useState } from "react";
 import { DashboardCard } from "./DashboardCard";
+import { AuthNotice } from "./AuthNotice";
+import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 import type { FinanceSnapshot } from "@/lib/types/database";
-
-interface FinancePulseProps {
-  snapshots: FinanceSnapshot[];
-  defaultVisible?: boolean;
-}
 
 function formatMoney(n?: number | null) {
   if (n == null) return "—";
@@ -19,8 +16,39 @@ function formatMoney(n?: number | null) {
   }).format(n);
 }
 
-export function FinancePulse({ snapshots, defaultVisible = false }: FinancePulseProps) {
+export function FinancePulse({ defaultVisible = false }: { defaultVisible?: boolean }) {
+  const { user, loading: authLoading, supabase } = useSupabaseUser();
   const [visible, setVisible] = useState(defaultVisible);
+  const [snapshots, setSnapshots] = useState<FinanceSnapshot[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchFinance = useCallback(async () => {
+    if (!user || !supabase) {
+      setSnapshots([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    const { data, error: fetchError } = await supabase
+      .from("finance_snapshots")
+      .select(
+        "id, snapshot_date, net_worth, cash_balance, investments, debt, monthly_income, monthly_expenses"
+      )
+      .order("snapshot_date", { ascending: false })
+      .limit(5);
+
+    if (fetchError) setError(fetchError.message);
+    else setSnapshots((data ?? []) as FinanceSnapshot[]);
+    setLoading(false);
+  }, [user, supabase]);
+
+  useEffect(() => {
+    if (!authLoading) fetchFinance();
+  }, [authLoading, fetchFinance]);
+
   const latest = snapshots[0];
 
   if (!visible) {
@@ -60,7 +88,13 @@ export function FinancePulse({ snapshots, defaultVisible = false }: FinancePulse
         </button>
       }
     >
-      {latest ? (
+      <AuthNotice />
+      {error && <p className="mb-2 text-xs text-red-400">{error}</p>}
+      {loading || authLoading ? (
+        <p className="text-sm text-zinc-500">Loading finance…</p>
+      ) : !user ? (
+        <p className="text-sm text-zinc-500">Sign in to view finance snapshots.</p>
+      ) : latest ? (
         <div className="grid grid-cols-2 gap-4">
           <Stat label="Net worth" value={formatMoney(latest.net_worth)} highlight />
           <Stat label="Cash" value={formatMoney(latest.cash_balance)} />
@@ -71,7 +105,8 @@ export function FinancePulse({ snapshots, defaultVisible = false }: FinancePulse
         </div>
       ) : (
         <p className="text-sm text-zinc-500">
-          Connect Google Sheets in settings to sync finance data.
+          No snapshots yet. Sync from Google Sheets or add rows in{" "}
+          <code className="text-emerald-400/80">finance_snapshots</code>.
         </p>
       )}
     </DashboardCard>

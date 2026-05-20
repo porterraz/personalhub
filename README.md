@@ -60,14 +60,14 @@ See [.env.example](./.env.example). Never commit `.env.local`.
 
 | Area | Status |
 |------|--------|
-| Dashboard UI (mock data) | Done |
-| Supabase schema migration | Done (not applied to cloud yet) |
+| Dashboard UI + live Supabase data | Done |
+| Supabase Auth (inline sign-in) | Done |
+| Tasks, Journal, Habits, CRM, Nutrition | Done |
+| Finance snapshots (read from Supabase) | Done |
+| Calendar widget (Google API) | Stub — needs GOOGLE_REFRESH_TOKEN |
 | Telegram webhook route | Done (needs deploy + env) |
-| Google Calendar / Sheets libs | Done (needs OAuth tokens) |
-| Supabase Auth + live dashboard | Not started (Phase 2) |
-| Google OAuth callback flow | Stub only |
+| Google Sheets finance sync | Not started |
 | Vercel deployment | Not started |
-| Settings / habit persistence | Not started |
 
 ## License
 
