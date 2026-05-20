@@ -186,7 +186,7 @@ Send a voice note: *“Remind me to email Sarah about the contract by Friday —
 | `NEXT_PUBLIC_SUPABASE_*` | Dashboard + auth |
 | `SUPABASE_SERVICE_ROLE_KEY` | Telegram webhook |
 | `OPENAI_API_KEY` | Whisper |
-| `ANTHROPIC_API_KEY` | Classification |
+| `GEMINI_API_KEY` | Classification |
 | `TELEGRAM_*` | Voice bot |
 | `GOOGLE_*` | Calendar + Sheets |
 

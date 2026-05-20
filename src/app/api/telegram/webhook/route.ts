@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const audio = await downloadVoiceFile(message.voice.file_id);
-    const transcript = await transcribeAudio(audio);
-    const classification = await classifyTranscript(transcript);
+    const transcript = await transcribeAudio(audio); // OpenAI Whisper
+    const classification = await classifyTranscript(transcript); // Google Gemini
     const supabase = createAdminClient();
     const { targetTable, classification: cls } = await ingestClassification(
       supabase,

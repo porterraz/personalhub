@@ -1,10 +1,4 @@
-import { FinancePulse } from "@/components/dashboard/FinancePulse";
-import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
-import { KeyTasks } from "@/components/dashboard/KeyTasks";
-import { DailyHabits } from "@/components/dashboard/DailyHabits";
-import { CRM } from "@/components/dashboard/CRM";
-import { NutritionLog } from "@/components/dashboard/NutritionLog";
-import { Journal } from "@/components/dashboard/Journal";
+import { DashboardGrid } from "@/components/dashboard/DashboardGrid";
 
 export default function DashboardPage() {
   return (
@@ -28,13 +22,7 @@ export default function DashboardPage() {
       </header>
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 p-6 md:grid-cols-2 lg:grid-cols-3">
-        <FinancePulse />
-        <CalendarWidget />
-        <KeyTasks />
-        <DailyHabits />
-        <CRM />
-        <NutritionLog />
-        <Journal />
+        <DashboardGrid />
       </div>
     </main>
   );

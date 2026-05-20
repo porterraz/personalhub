@@ -28,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - **Frontend:** Next.js 16, React, Tailwind CSS
 - **Backend:** Supabase (Postgres + Auth + RLS)
 - **Integrations:** Google Calendar API, Google Sheets API, Telegram Bot API
-- **AI:** OpenAI Whisper (transcription), Anthropic Claude (classification)
+- **AI:** OpenAI Whisper (transcription), Google Gemini (classification)
 - **Deploy:** Vercel (serverless API routes, 60s webhook timeout)
 
 ## Dashboard modules
@@ -48,7 +48,7 @@ Open [http://localhost:3000](http://localhost:3000).
 1. User sends voice note to Telegram bot
 2. Webhook `POST /api/telegram/webhook` downloads audio
 3. OpenAI Whisper → transcript
-4. Claude → JSON classification (`task`, `crm`, `journal`, `nutrition`, `habit_note`)
+4. Gemini → JSON classification (`task`, `crm`, `journal`, `nutrition`, `habit_note`)
 5. Insert into Supabase + audit row in `voice_ingestions`
 6. Bot replies with confirmation
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Personal OS is a single-user dashboard and automation hub: a **Next.js** frontend, **Supabase** as the system of record, **Google APIs** for calendar and finance, and a **Telegram → Whisper → Claude → Supabase** voice pipeline on **Vercel serverless**.
+Personal OS is a single-user dashboard and automation hub: a **Next.js** frontend, **Supabase** as the system of record, **Google APIs** for calendar and finance, and a **Telegram → Whisper → Gemini → Supabase** voice pipeline on **Vercel serverless**.
 
 ```mermaid
 flowchart TB
@@ -20,7 +20,7 @@ flowchart TB
     GCal[Google Calendar]
     GSheets[Google Sheets]
     OAI[OpenAI Whisper]
-    Claude[Anthropic Claude]
+    Gemini[Google Gemini]
   end
 
   subgraph Supabase
@@ -35,7 +35,7 @@ flowchart TB
   API --> DB
   TG -->|voice note| WH
   WH --> OAI
-  WH --> Claude
+  WH --> Gemini
   WH --> DB
   WH --> TG
 ```
@@ -85,7 +85,7 @@ All tables use **RLS** scoped to `auth.uid()`. The Telegram webhook uses the **s
 2. Telegram POSTs update to `POST /api/telegram/webhook` (secret header validated).
 3. Resolve `user_id` via `profiles.telegram_chat_id`.
 4. Download audio → **Whisper** transcript.
-5. **Claude** returns JSON classification (`task`, `crm`, `journal`, `nutrition`, `habit_note`).
+5. **Gemini** returns JSON classification (`task`, `crm`, `journal`, `nutrition`, `habit_note`).
 6. `ingestClassification()` inserts into the correct table + `voice_ingestions`.
 7. Bot replies with confirmation.
 
